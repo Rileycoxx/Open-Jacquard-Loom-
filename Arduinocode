@@ -1,0 +1,64 @@
+#include <Servo.h>
+
+// Define servo and button pins
+const int servoPin = 9;
+const int buttonPin = 2;
+
+Servo myServo;
+
+#include <Servo.h>
+
+// Define servo and button pins
+const int servoPin1 = 9; // Pin for first servo
+const int servoPin2 = 10; // Pin for second servo
+const int buttonPin = 2;
+
+Servo myServo1;
+Servo myServo2;
+
+// Variables to track servo position and button state
+int servoPosition1 = 0;       // Initial position for first servo
+int servoPosition2 = 0;       // Initial position for second servo
+int buttonState = 0;         // Variable to store the button state
+int lastButtonState = 0;     // Variable to store the previous button state
+bool servoDirection = true;  // True: move from 0 to 90, False: move from 90 to 0
+
+void setup() {
+  // Attach servos to the corresponding pins
+  myServo1.attach(servoPin1);
+  myServo2.attach(servoPin2);
+
+  // Set button pin as input
+  pinMode(buttonPin, INPUT);
+}
+
+void loop() {
+  // Read the state of the button
+  buttonState = digitalRead(buttonPin);
+
+  // Check if the button is pressed and the previous state was not pressed
+  if (buttonState == HIGH && lastButtonState == LOW) {
+    // Change the servo direction
+    servoDirection = !servoDirection;
+
+    // Move the servos based on the direction
+    if (servoDirection) {
+      // Move from 0 to 90 degrees for both servos
+      for (int pos = 0; pos <= 90; pos += 1) {
+        myServo1.write(pos);
+        myServo2.write(pos);
+        delay(15);
+      }
+    } else {
+      // Move from 90 to 0 degrees for both servos
+      for (int pos = 90; pos >= 0; pos -= 1) {
+        myServo1.write(pos);
+        myServo2.write(pos);
+        delay(15);
+      }
+    }
+  }
+
+  // Update the last button state
+  lastButtonState = buttonState;
+}
